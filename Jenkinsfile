@@ -63,6 +63,21 @@ pipeline {
                     echo "Deploring to Site ID: $NETLIFY_SITE_ID"
                     netlify status
                     netlify deploy --prod --dir=build
+
+                    
+                '''
+            }
+        }stage('AWS') {
+            agent {
+                docker { 
+                    image 'amazon/aws-cli' 
+                    reuseNode true
+                }
+            }
+            steps {
+                sh '''
+                    aws --version
+                    
                 '''
             }
         }
