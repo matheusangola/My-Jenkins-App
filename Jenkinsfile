@@ -79,7 +79,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'e61a70d4-540b-49d4-844c-4694f16bf24f', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                 sh '''
                     aws --version
-                    
+                    aws s3 ls
                 '''
                 }
             }
