@@ -1,47 +1,47 @@
 pipeline {
     agent any
-    environment {
-        NETLIFY_SITE_ID = "5aee8b40-1dec-427f-a2e9-a479d4cb8102"
-        NETLIFY_AUTH_TOKEN = credentials('my-react-token')
-    }
+    // environment {
+    //     NETLIFY_SITE_ID = "5aee8b40-1dec-427f-a2e9-a479d4cb8102"
+    //     NETLIFY_AUTH_TOKEN = credentials('my-react-token')
+    // }
     stages {
-        stage('Docker'){
-            steps{
-                sh 'docker build -t my-docker-image .'
-            }
-        }
-        stage('Build') {
-            agent {
-                docker { 
-                    image 'node:20.17.0-alpine' 
-                    reuseNode true
-                }
-            }
-            steps {
-                sh '''
-                ls -la
-                    node --version
-                    npm -version
-                    npm install
-                    npm run build
-                    ls -la
-                '''
-            }
-        }
-        stage('Test') {
-            agent {
-                docker { 
-                    image 'node:20.17.0-alpine' 
-                    reuseNode true
-                }
-            }
-            steps {
-                sh '''
-                    test -f build/index.html
-                    npm test
-                '''
-            }
-        }
+        // stage('Docker'){
+        //     steps{
+        //         sh 'docker build -t my-docker-image .'
+        //     }
+        // }
+        // stage('Build') {
+        //     agent {
+        //         docker { 
+        //             image 'node:20.17.0-alpine' 
+        //             reuseNode true
+        //         }
+        //     }
+        //     steps {
+        //         sh '''
+        //         ls -la
+        //             node --version
+        //             npm -version
+        //             npm install
+        //             npm run build
+        //             ls -la
+        //         '''
+        //     }
+        // }
+        // stage('Test') {
+        //     agent {
+        //         docker { 
+        //             image 'node:20.17.0-alpine' 
+        //             reuseNode true
+        //         }
+        //     }
+        //     steps {
+        //         sh '''
+        //             test -f build/index.html
+        //             npm test
+        //         '''
+        //     }
+        // }
         // stage('Deploy') {
         //     agent {
         //         docker { 
