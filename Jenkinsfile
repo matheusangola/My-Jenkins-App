@@ -4,6 +4,9 @@ pipeline {
     //     NETLIFY_SITE_ID = "5aee8b40-1dec-427f-a2e9-a479d4cb8102"
     //     NETLIFY_AUTH_TOKEN = credentials('my-react-token')
     // }
+    environment {
+            AWS_S3_BUCKET = 'my-jenkins-20250320'
+    }
     stages {
         // stage('Docker'){
         //     steps{
@@ -68,9 +71,7 @@ pipeline {
         //         '''
         //     }
         // }
-        environment {
-            AWS_S3_BUCKET = 'my-jenkins-20250320'
-    }
+        
         stage('AWS') {
             agent {
                 docker { 
