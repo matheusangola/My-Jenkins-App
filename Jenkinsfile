@@ -10,38 +10,38 @@ pipeline {
         //         sh 'docker build -t my-docker-image .'
         //     }
         // }
-        // stage('Build') {
-        //     agent {
-        //         docker { 
-        //             image 'node:20.17.0-alpine' 
-        //             reuseNode true
-        //         }
-        //     }
-        //     steps {
-        //         sh '''
-        //         ls -la
-        //             node --version
-        //             npm -version
-        //             npm install
-        //             npm run build
-        //             ls -la
-        //         '''
-        //     }
-        // }
-        // stage('Test') {
-        //     agent {
-        //         docker { 
-        //             image 'node:20.17.0-alpine' 
-        //             reuseNode true
-        //         }
-        //     }
-        //     steps {
-        //         sh '''
-        //             test -f build/index.html
-        //             npm test
-        //         '''
-        //     }
-        // }
+        stage('Build') {
+            agent {
+                docker { 
+                    image 'node:20.17.0-alpine' 
+                    reuseNode true
+                }
+            }
+            steps {
+                sh '''
+                ls -la
+                    node --version
+                    npm -version
+                    npm install
+                    npm run build
+                    ls -la
+                '''
+            }
+        }
+        stage('Test') {
+            agent {
+                docker { 
+                    image 'node:20.17.0-alpine' 
+                    reuseNode true
+                }
+            }
+            steps {
+                sh '''
+                    test -f build/index.html
+                    npm test
+                '''
+            }
+        }
         // stage('Deploy') {
         //     agent {
         //         docker { 
@@ -68,6 +68,9 @@ pipeline {
         //         '''
         //     }
         // }
+        environment {
+            AWS_S3_BUCKET = 'my-jenkins-20250320'
+    }
         stage('AWS') {
             agent {
                 docker { 
@@ -82,7 +85,8 @@ pipeline {
                     aws --version
                     aws s3 ls
                     echo "Hello S3!" > index.html
-                    aws s3 cp index.html s3://my-jenkins-20250320/index.html
+                    # aws s3 cp index.html s3://my-jenkins-20250320/index.html
+                    aws s3 sync build s3://$AWS_S3_BUCKET
                 '''
                 }
             }
