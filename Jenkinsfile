@@ -87,13 +87,14 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'e61a70d4-540b-49d4-844c-4694f16bf24f', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                 sh '''
                     aws --version
+                    yum install jq -y
                     #aws s3 ls
                     # echo "Hello S3!" > index.html
                     # aws s3 cp index.html s3://my-jenkins-20250320/index.html
                     #aws s3 sync build s3://$AWS_S3_BUCKET
-                    aws ecs register-task-definition --cli-input-json file://aws/task-definition.json
+                    LATEST_TD_REVISION = $(aws ecs register-task-definition --cli-input-json file://aws/task-definition.json | jq '.taskDefinition.revision)
 
-                    aws ecs update-service --cluster my-react-cluster --service My-React-App-Service --task-definition MyReactApp-TaskDefnition:1
+                    aws ecs update-service --cluster my-react-cluster --service My-React-App-Service --task-definition task-definition:$LATEST_TD_REVISION
                 '''
                 }
             }
