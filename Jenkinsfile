@@ -91,7 +91,7 @@ pipeline {
                     # echo "Hello S3!" > index.html
                     # aws s3 cp index.html s3://my-jenkins-20250320/index.html
                     #aws s3 sync build s3://$AWS_S3_BUCKET
-                    aws ecs register-task-definition --cli-input-json file://aws/task-definition.jso
+                    aws ecs register-task-definition --cli-input-json file://aws/task-definition.json
                 '''
                 }
             }
