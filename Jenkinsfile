@@ -48,6 +48,21 @@ pipeline {
                 '''
             }
         }
+        stage('Build My Docker Image'){
+            agent {
+                docker { 
+                    image 'amazon/aws-cli'
+                    reuseNode true
+                    args '-u root --entrypoint=""'
+                }
+            }
+            steps{
+                sh '''
+                amazon-linux-extras install docker
+                docker build -t my-docker-image .
+                '''
+            }
+        }
         // stage('Deploy') {
         //     agent {
         //         docker { 
@@ -75,29 +90,29 @@ pipeline {
         //     }
         // }
         
-        stage('Deploy to AWS') {
-            agent {
-                docker { 
-                    image 'amazon/aws-cli'
-                    reuseNode true
-                    args '--entrypoint=""'
-                }
-            }
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'e61a70d4-540b-49d4-844c-4694f16bf24f', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
-                sh '''
-                    aws --version
-                    yum install jq -y
-                    #aws s3 ls
-                    # echo "Hello S3!" > index.html
-                    # aws s3 cp index.html s3://my-jenkins-20250320/index.html
-                    #aws s3 sync build s3://$AWS_S3_BUCKET
-                    LATEST_TD_REVISION=$(aws ecs register-task-definition --cli-input-json file://aws/task-definition.json | jq '.taskDefinition.revision')
-                    aws ecs update-service --cluster my-react-cluster --service My-React-App-Service --task-definition task-definition:$LATEST_TD_REVISION
-                '''
-                }
-            }
-        }
+        // stage('Deploy to AWS') {
+        //     agent {
+        //         docker { 
+        //             image 'amazon/aws-cli'
+        //             reuseNode true
+        //             args '-u root --entrypoint=""'
+        //         }
+        //     }
+        //     steps {
+        //         withCredentials([usernamePassword(credentialsId: 'e61a70d4-540b-49d4-844c-4694f16bf24f', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
+        //         sh '''
+        //             aws --version
+        //             yum install jq -y
+        //             #aws s3 ls
+        //             # echo "Hello S3!" > index.html
+        //             # aws s3 cp index.html s3://my-jenkins-20250320/index.html
+        //             #aws s3 sync build s3://$AWS_S3_BUCKET
+        //             LATEST_TD_REVISION=$(aws ecs register-task-definition --cli-input-json file://aws/task-definition.json | jq '.taskDefinition.revision')
+        //             aws ecs update-service --cluster my-react-cluster --service My-React-App-Service --task-definition task-definition:$LATEST_TD_REVISION
+        //         '''
+        //         }
+        //     }
+        // }
     }
 }
 
