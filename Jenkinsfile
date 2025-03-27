@@ -92,6 +92,8 @@ pipeline {
                     # aws s3 cp index.html s3://my-jenkins-20250320/index.html
                     #aws s3 sync build s3://$AWS_S3_BUCKET
                     aws ecs register-task-definition --cli-input-json file://aws/task-definition.json
+
+                    aws ecs update-service --cluster my-react-cluster --service My-React-App-Service --task-definition MyReactApp-TaskDefnition:1
                 '''
                 }
             }
