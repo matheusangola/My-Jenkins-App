@@ -6,7 +6,7 @@
     "containerDefinitions": [
         {
             "name": "myNewImage",
-            "image": "nginx:1.27-alpine",
+            "image": "703671926514.dkr.ecr.us-east-1.amazonaws.com/my-react-app-image",
             "portMappings": [
                 {
                     "name": "ngnix-80-tcp",
