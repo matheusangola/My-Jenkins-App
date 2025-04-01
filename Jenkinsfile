@@ -9,7 +9,7 @@ pipeline {
     // }
     environment {
             AWS_DOCKER_REGISTRY = '703671926514.dkr.ecr.us-east-1.amazonaws.com/my-react-app-image'
-            APP_NAME = 'my-docker-image'
+            APP_NAME = 'my-react-app-image'
             AWS_DEFAULT_REGION = 'us-east-1'
     }
     stages {
@@ -59,12 +59,14 @@ pipeline {
                 }
             }
             steps{
+                withCredentials([usernamePassword(credentialsId: 'e61a70d4-540b-49d4-844c-4694f16bf24f', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                 sh '''
                 amazon-linux-extras install docker
                 docker build -t $AWS_DOCKER_REGISTRY/$APP_NAME .
                 aws ecr get-login-password | docker login --username AWS --password-stdin $AWS_DOCKER_REGISTRY
                 docker push $AWS_DOCKER_REGISTRY/$APP_NAME:latest
                 '''
+            }
             }
         }
         // stage('Deploy') {
