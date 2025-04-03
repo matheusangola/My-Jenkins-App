@@ -8,7 +8,7 @@ pipeline {
     //         AWS_S3_BUCKET = 'my-jenkins-20250320'
     // }
     environment {
-            AWS_DOCKER_REGISTRY = '703671926514.dkr.ecr.us-east-1.amazonaws.com/my-react-app-image'
+            AWS_DOCKER_REGISTRY = '703671926514.dkr.ecr.us-east-1.amazonaws.com'
             APP_NAME = 'my-react-app-image'
             AWS_DEFAULT_REGION = 'us-east-1'
     }
