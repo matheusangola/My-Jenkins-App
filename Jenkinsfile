@@ -1,23 +1,23 @@
 pipeline {
     agent any
-    // environment {
-    //     NETLIFY_SITE_ID = "5aee8b40-1dec-427f-a2e9-a479d4cb8102"
-    //     NETLIFY_AUTH_TOKEN = credentials('my-react-token')
-    // }
-    // environment {
-    //         AWS_S3_BUCKET = 'my-jenkins-20250320'
-    // }
+    environment {
+        NETLIFY_SITE_ID = "5aee8b40-1dec-427f-a2e9-a479d4cb8102"
+        NETLIFY_AUTH_TOKEN = credentials('my-react-token')
+    }
+    environment {
+            AWS_S3_BUCKET = 'my-jenkins-20250320'
+    }
     environment {
             AWS_DOCKER_REGISTRY = '703671926514.dkr.ecr.us-east-1.amazonaws.com'
             APP_NAME = 'my-react-app-image'
             AWS_DEFAULT_REGION = 'us-east-1'
     }
     stages {
-        // stage('Docker'){
-        //     steps{
-        //         sh 'docker build -t my-docker-image .'
-        //     }
-        // }
+        stage('Docker'){
+            steps{
+                sh 'docker build -t my-docker-image .'
+            }
+        }
         stage('Build') {
             agent {
                 docker { 
@@ -69,32 +69,32 @@ pipeline {
             }
             }
         }
-        // stage('Deploy') {
-        //     agent {
-        //         docker { 
-        //             image 'my-docker-image' 
-        //             reuseNode true
-        //         }
-        //     }
-        //     steps {
-        //         sh '''
-        //             # npm install netlify-cli
-        //             # node_modules/.bin/netlify --version
-        //             # echo "Deploring to Site ID: $NETLIFY_SITE_ID"
-        //             # node_modules/.bin/netlify status
-        //             # node_modules/.bin/netlify deploy --prod --dir=build
+        stage('Deploy') {
+            agent {
+                docker { 
+                    image 'my-docker-image' 
+                    reuseNode true
+                }
+            }
+            steps {
+                sh '''
+                    # npm install netlify-cli
+                    # node_modules/.bin/netlify --version
+                    # echo "Deploring to Site ID: $NETLIFY_SITE_ID"
+                    # node_modules/.bin/netlify status
+                    # node_modules/.bin/netlify deploy --prod --dir=build
 
-        //             #### Custom docker image
+                    #### Custom docker image
 
-        //             netlify --version
-        //             echo "Deploring to Site ID: $NETLIFY_SITE_ID"
-        //             netlify status
-        //             netlify deploy --prod --dir=build
+                    netlify --version
+                    echo "Deploring to Site ID: $NETLIFY_SITE_ID"
+                    netlify status
+                    netlify deploy --prod --dir=build
 
                     
-        //         '''
-        //     }
-        // }
+                '''
+            }
+        }
         
         stage('Deploy to AWS') {
             agent {
